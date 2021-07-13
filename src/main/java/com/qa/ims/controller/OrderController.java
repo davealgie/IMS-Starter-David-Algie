@@ -6,8 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.dao.CustomerDAO;
+import com.qa.ims.persistence.dao.ItemDAO;
 import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.OrderItemDAO;
+import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.persistence.domain.OrderItem;
 import com.qa.ims.utils.Utils;
 
 public class OrderController implements CrudController<Order> {
@@ -15,8 +20,20 @@ public class OrderController implements CrudController<Order> {
 	public static final Logger LOGGER = LogManager.getLogger();
 	
 	private OrderDAO orderDAO;
+	private ItemDAO itemDAO;
 	private CustomerDAO customerDAO;
+	private OrderItemDAO orderItemDAO;
 	private Utils utils;
+	
+	public OrderController(OrderDAO orderDAO, ItemDAO itemDAO, OrderItemDAO orderItemDAO, CustomerDAO customerDAO,
+			Utils utils) {
+		super();
+		this.orderDAO = orderDAO;
+		this.itemDAO = itemDAO;
+		this.orderItemDAO = orderItemDAO;
+		this.customerDAO = customerDAO;
+		this.utils = utils;
+	}
 	
 	@Override
 	public List<Order> readAll() {
