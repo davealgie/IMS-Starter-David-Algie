@@ -11,6 +11,7 @@ import com.qa.ims.controller.OrderController;
 import com.qa.ims.persistence.dao.CustomerDAO;
 import com.qa.ims.persistence.dao.ItemDAO;
 import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.OrderItemDAO;
 import com.qa.ims.persistence.domain.Domain;
 import com.qa.ims.utils.DBUtils;
 import com.qa.ims.utils.Utils;
@@ -31,6 +32,7 @@ public class IMS {
 		final CustomerDAO custDAO = new CustomerDAO();
 		final OrderItemDAO orderItemDAO = new OrderItemDAO();
 		this.customers = new CustomerController(custDAO, utils);
+		this.items = new ItemController(itemDAO, utils);
 		this.orders = new OrderController(orderDAO,itemDAO,orderItemDAO,custDAO,utils);
 	}
 

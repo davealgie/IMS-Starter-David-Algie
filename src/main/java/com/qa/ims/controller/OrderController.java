@@ -38,10 +38,39 @@ public class OrderController implements CrudController<Order> {
 	@Override
 	public List<Order> readAll() {
 		List<Order> orders = orderDAO.readAll();
+		if(orders.size() < 1) {
+			LOGGER.info("There are no orders stored in the database.");
+			return orders;
+		}
 		for (Order order : orders) {
 			LOGGER.info(order);
 		}
 		return orders;
+	}
+	
+	@Override
+	public Order create() {
+		LOGGER.info("Please enter your first name");
+		String firstName = utils.getString();
+		LOGGER.info("Please enter your surname");
+		String surname = utils.getString();
+		List<Customer> customers = customerDAO.readAll();
+		Long id = (long) -1;
+		for (Customer customer : customers) {
+			if (customer.getFirstName().equalsIgnoreCase(firstName) && customer.getSurname().equalsIgnoreCase(surname)) {
+				id = customer.getId();
+			}
+		}
+		if (id != -1) {
+			Order order = orderDAO.create(new Order(id,(double) 0)); //Items can be added to the order
+			LOGGER.info("Order started");
+			return addItem(order);
+		} else {
+			LOGGER.info("No such customer");
+			Order order = new Order(null,0.0);
+			return order;
+		}
+
 	}
 	
 	@Override
@@ -51,7 +80,7 @@ public class OrderController implements CrudController<Order> {
 		List<OrderItem> orderItems = orderItemDAO.readAll();
 		for (OrderItem orderItem : orderItems) {
 			if (orderItem.getOrderId()== id) {
-				int deletedOrderItem = orderItemDAO.delete(orderItem.getId());
+					orderItemDAO.delete(orderItem.getOrderItemId());
 			}
 		}
 		return orderDAO.delete(id);
@@ -61,17 +90,88 @@ public class OrderController implements CrudController<Order> {
 	public Order update() {
 		LOGGER.info("Please enter the id of the order");
 		Long orderId = utils.getLong();
-		// leaving the customer update part for now, not actually in MVP
-		//LOGGER.info("Please enter the id of the customer making the order");
-		//Long customerId = utils.getLong(); 
 		Order order = orderDAO.read(orderId);
-		LOGGER.info("First you will add any new items, then delete any old items. You do not have to both add and remove if you choose not to");
 		addItem(order);
 		removeItem(order);
 		return order;
 	}
 	
+	private Order addItem(Order order) {
+		List<Item> items = itemDAO.readAll();
+		LOGGER.info("Here are the items you can currently add:");
+		for (Item item : items) {
+			LOGGER.info(item.getName());
+		}
+		LOGGER.info("Please enter an item to add. Enter 'Complete' when done");
+		String newItem = utils.getString();
+		if (newItem.equalsIgnoreCase("COMPLETE")) {
+			return order;
+		} else {
+			Long itemId = (long) -1;
+			for (Item it : items) {
+				if (it.getName().equalsIgnoreCase(newItem)) {
+					itemId = it.getId();
+				}
+			}
+			
+			if (itemId != -1) {
+				Item item = itemDAO.read(itemId);
+				Order updatedOrder = orderDAO.update(new Order(order.getId(), order.getCustomerId(),order.getTotal()+item.getValue()));
+				orderItemDAO.create(new OrderItem(updatedOrder.getId(),itemId));
+				LOGGER.info("Item added");
+				return addItem(updatedOrder);
+			} else {
+				LOGGER.info("No such item, please try again");
+				order = addItem(order);
+				return order;
+			}
+		}
+	}
 	
+	private Order removeItem(Order order) {
+		List<Item> items = itemDAO.readAll();
+		LOGGER.info("Please enter an item to remove. Enter 'Complete' when you're finished");
+		String newItem = utils.getString();
+		if (newItem.toUpperCase().equalsIgnoreCase("COMPLETE")) {
+			return order;
+		} else {
+			Long itemId = (long) -1;
+			for (Item it : items) {
+				if (it.getName().equalsIgnoreCase(newItem)) {
+					itemId = it.getId();
+				}
+			}
+			
+			if (itemId != -1) {
+				Item item = itemDAO.read(itemId);
+				Order updatedOrder = orderDAO.update(new Order(order.getId(),order.getCustomerId(),order.getTotal()-item.getValue()));
+				LOGGER.info("HEY LOOK HERE!");
+				LOGGER.info(updatedOrder);
+				List<OrderItem> orderItems = orderItemDAO.readAll();
+				Long orderItemId = (long) -1;
+				for (OrderItem oi :orderItems) {
+					if (oi.getOrderId()==order.getId() && oi.getItemId()==itemId) {
+						orderItemId = oi.getOrderItemId();
+					}
+				}
+				
+				if (orderItemId != -1) {
+					orderItemDAO.delete(orderItemId);
+					LOGGER.info("Item removed from order");
+					return removeItem(updatedOrder);
+				} else {
+					LOGGER.info("Item not in order, please try again");
+					return removeItem(order);
+				}
 	
+			} else {
+				LOGGER.info("No such item, please try again");
+				return removeItem(order);
+				
+			}
+			
+		}
+	}
 	
+
 }

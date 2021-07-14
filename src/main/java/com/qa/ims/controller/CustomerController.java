@@ -72,10 +72,11 @@ public class CustomerController implements CrudController<Customer> {
 		String firstName = utils.getString();
 		LOGGER.info("Please enter a surname");
 		String surname = utils.getString();
-		Customer customer = customerDAO.update(new Customer(id, firstName, surname));
+		customer = customerDAO.update(new Customer(id, firstName, surname));
 		LOGGER.info("Customer Updated");
 		return customer;
 	}
+
 
 	/**
 	 * Deletes an existing customer by the id of the customer
