@@ -6,20 +6,18 @@ public class Order {
 	
 	private Long id;
 	private Long customerId;
-	private Double total;
 	
 	public Order() {
 	}
 	
-	public Order(Long id, Long customerId, Double total) {
+	public Order(Long id, Long customerId) {
 		this.id = id;
 		this.customerId = customerId;
-		this.total = total;
+	
 	}
 	
-	public Order(Long customerId, Double total) {
+	public Order(Long customerId) {
 		this.customerId = customerId;
-		this.total = total;
 	}
 
 	public Long getId() {
@@ -38,21 +36,13 @@ public class Order {
 		this.customerId = customerId;
 	}
 
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-	
 	@Override
 	public String toString() {
-		return "Order id: " + id + ", Customer Id: " + customerId + ", total: " + total;
+		return "Order id: " + id + ", Customer Id: " + customerId;
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerId, id, total);
+		return Objects.hash(customerId, id);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -63,8 +53,7 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		return Objects.equals(customerId, other.customerId) && Objects.equals(id, other.id)
-				&& Objects.equals(total, other.total);
+		return Objects.equals(customerId, other.customerId) && Objects.equals(id, other.id);
 	}
 	
 }
