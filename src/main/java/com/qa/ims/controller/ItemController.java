@@ -30,6 +30,7 @@ public class ItemController implements CrudController<Item> {
 		}
 		return items;
 	}
+	
 	@Override
 	public Item create() {
 		LOGGER.info("Please enter the item name");
@@ -58,6 +59,11 @@ public class ItemController implements CrudController<Item> {
 	public int delete() {
 		LOGGER.info("Please enter the id of the item you would like to delete");
 		Long id = utils.getLong();
+		Item item = itemDAO.read(id);
+		if(item == null) {
+			LOGGER.info("Item with the id specified could not be found. Please insert a valid ID");
+			return 0;
+		}
 		return itemDAO.delete(id);
 	}
 	
