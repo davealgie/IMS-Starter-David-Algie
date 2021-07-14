@@ -11,11 +11,15 @@ CREATE TABLE IF NOT EXISTS ims.customers (
   PRIMARY KEY (id));
 
 
+
+
 CREATE TABLE IF NOT EXISTS ims.items (
   item_id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
-  value DECIMAL(10,2) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (item_id));
+
+
 
 
 CREATE TABLE IF NOT EXISTS ims.orders (
@@ -25,7 +29,10 @@ CREATE TABLE IF NOT EXISTS ims.orders (
   CONSTRAINT customer_id
     FOREIGN KEY (customer_id)
     REFERENCES ims.customers (id)
-);
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
 
 
 CREATE TABLE IF NOT EXISTS ims.orders_items (
@@ -35,8 +42,11 @@ CREATE TABLE IF NOT EXISTS ims.orders_items (
   PRIMARY KEY (orders_items_id),
   CONSTRAINT orders_id
     FOREIGN KEY (orders_id)
-    REFERENCES ims.orders (orders_id),
+    REFERENCES ims.orders (orders_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT item_id
     FOREIGN KEY (item_id)
     REFERENCES ims.items (item_id)
-  );
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
