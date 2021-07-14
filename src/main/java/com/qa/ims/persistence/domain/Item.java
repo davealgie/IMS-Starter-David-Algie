@@ -7,6 +7,17 @@ public class Item {
 	private Long id;
 	private String name;
 	private Double value;
+	
+	public Item(String name, double value) {
+		this.name = name;
+		this.value = value;
+	}
+	
+	public Item(Long id, String name, double value) {
+		this.id = id;
+		this.name = name;
+		this.value = value;
+	}
 
 	public Long getId() {
 		return id;
@@ -45,7 +56,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", value=" + value + "]";
+		return "Item id=: " + id + ", name: " + name + ", value: " + value;
 	}
 
 	@Override
