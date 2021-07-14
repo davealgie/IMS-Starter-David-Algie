@@ -99,7 +99,7 @@ public class OrderDAO implements Dao<Order> {
 				PreparedStatement statement = connection
 						.prepareStatement("UPDATE Orders SET customer_id = ?, WHERE orders_id = ?");) {
 			statement.setLong(1, order.getCustomerId());
-			statement.setLong(3, order.getId());
+			statement.setLong(2, order.getId());
 			statement.executeUpdate();
 			return read(order.getId());
 		} catch (Exception e) {
