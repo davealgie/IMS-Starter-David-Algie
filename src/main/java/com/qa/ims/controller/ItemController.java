@@ -25,6 +25,10 @@ public class ItemController implements CrudController<Item> {
 	@Override
 	public List<Item> readAll() {
 		List<Item> items = itemDAO.readAll();
+		if(items.size() < 1) {
+			LOGGER.info("There are no items stored in the database.");
+			return items;
+		}
 		for (Item item : items) {
 			LOGGER.info(item);
 		}
@@ -36,8 +40,8 @@ public class ItemController implements CrudController<Item> {
 		LOGGER.info("Please enter the item name");
 		String name = utils.getString();
 		LOGGER.info("Please enter the value");
-		Double price = utils.getDouble();
-		Item item = itemDAO.create(new Item(name, price));
+		Double value = utils.getDouble();
+		Item item = itemDAO.create(new Item(name, value));
 		LOGGER.info("Item created");
 		return item;
 	}
@@ -48,9 +52,9 @@ public class ItemController implements CrudController<Item> {
 		Long id = utils.getLong();
 		LOGGER.info("Please enter the item name");
 		String name = utils.getString();
-		LOGGER.info("Please the value");
-		Double price = utils.getDouble();
-		Item item = itemDAO.update(new Item(id, name, price));
+		LOGGER.info("Please enter the new value");
+		Double value = utils.getDouble();
+		Item item = itemDAO.update(new Item(id, name, value));
 		LOGGER.info("Item Updated");
 		return item;
 	}
@@ -61,10 +65,14 @@ public class ItemController implements CrudController<Item> {
 		Long id = utils.getLong();
 		Item item = itemDAO.read(id);
 		if(item == null) {
-			LOGGER.info("Item with the id specified could not be found. Please insert a valid ID");
+			LOGGER.info("Item with that id could not be found. Please insert another ID");
 			return 0;
 		}
-		return itemDAO.delete(id);
+		int result = itemDAO.delete(id);
+		if(result > 0) {
+			LOGGER.info("Item Deleted");			
+		}
+		return result;
 	}
 	
 

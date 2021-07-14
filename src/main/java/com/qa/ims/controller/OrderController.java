@@ -50,26 +50,20 @@ public class OrderController implements CrudController<Order> {
 	
 	@Override
 	public Order create() {
-		LOGGER.info("Please enter your first name");
-		String firstName = utils.getString();
-		LOGGER.info("Please enter your surname");
-		String surname = utils.getString();
-		List<Customer> customers = customerDAO.readAll();
-		Long id = (long) -1;
-		for (Customer customer : customers) {
-			if (customer.getFirstName().equalsIgnoreCase(firstName) && customer.getSurname().equalsIgnoreCase(surname)) {
-				id = customer.getId();
-			}
-		}
-		if (id != -1) {
-			Order order = orderDAO.create(new Order(id,(double) 0)); //Items can be added to the order
-			LOGGER.info("Order started");
-			return addItem(order);
-		} else {
-			LOGGER.info("No such customer");
-			Order order = new Order(null,0.0);
-			return order;
-		}
+		LOGGER.info("Please enter your customer id");
+		Long customerID = utils.getLong();
+		Order order = orderDAO.create(new Order(customerID));
+		LOGGER.info("order created");
+		return order;
+//		if (id != -1) {
+//			Order order = orderDAO.create(new Order(id,(double) 0)); //Items can be added to the order
+//			LOGGER.info("Order started");
+//			return addItem(order);
+//		} else {
+//			LOGGER.info("No such customer");
+//			Order order = new Order(null,0.0);
+//			return order;
+//		}
 
 	}
 	
@@ -116,7 +110,7 @@ public class OrderController implements CrudController<Order> {
 			
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(), order.getCustomerId(),order.getTotal()+item.getValue()));
+				Order updatedOrder = orderDAO.update(new Order(order.getId(), order.getCustomerId()));
 				orderItemDAO.create(new OrderItem(updatedOrder.getId(),itemId));
 				LOGGER.info("Item added");
 				return addItem(updatedOrder);
@@ -144,7 +138,7 @@ public class OrderController implements CrudController<Order> {
 			
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(),order.getCustomerId(),order.getTotal()-item.getValue()));
+				Order updatedOrder = orderDAO.update(new Order(order.getId(),order.getCustomerId()));
 				LOGGER.info("HEY LOOK HERE!");
 				LOGGER.info(updatedOrder);
 				List<OrderItem> orderItems = orderItemDAO.readAll();
