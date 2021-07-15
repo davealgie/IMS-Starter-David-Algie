@@ -98,8 +98,8 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("UPDATE Orders SET customer_id = ?, WHERE orders_id = ?");) {
-			statement.setLong(1, order.getCustomerId());
-			statement.setLong(2, order.getId());
+			statement.setLong(1, order.getId());
+			statement.setLong(2, order.getCustomerId());
 			statement.executeUpdate();
 			return read(order.getId());
 		} catch (Exception e) {

@@ -55,16 +55,17 @@ public class OrderController implements CrudController<Order> {
 		Order order = orderDAO.create(new Order(customerID));
 		LOGGER.info("order created");
 		return order;
-//		if (id != -1) {
-//			Order order = orderDAO.create(new Order(id,(double) 0)); //Items can be added to the order
-//			LOGGER.info("Order started");
-//			return addItem(order);
-//		} else {
-//			LOGGER.info("No such customer");
-//			Order order = new Order(null,0.0);
-//			return order;
-//		}
-
+	}
+	
+	
+	@Override
+	public Order update() {
+		LOGGER.info("Please enter the id of the order");
+		Long orderId = utils.getLong();
+		Order order = orderDAO.read(orderId);
+		addItem(order);
+		removeItem(order);
+		return order;
 	}
 	
 	@Override
@@ -80,16 +81,6 @@ public class OrderController implements CrudController<Order> {
 		return orderDAO.delete(id);
 	}
 	
-	@Override
-	public Order update() {
-		LOGGER.info("Please enter the id of the order");
-		Long orderId = utils.getLong();
-		Order order = orderDAO.read(orderId);
-		addItem(order);
-		removeItem(order);
-		return order;
-	}
-	
 	private Order addItem(Order order) {
 		List<Item> items = itemDAO.readAll();
 		LOGGER.info("Here are the items you can currently add:");
@@ -97,7 +88,7 @@ public class OrderController implements CrudController<Order> {
 			LOGGER.info(item.getName());
 		}
 		LOGGER.info("Please enter an item to add. Enter 'Complete' when done");
-		String newItem = utils.getString();
+		String newItem = utils.getString().toUpperCase();
 		if (newItem.equalsIgnoreCase("COMPLETE")) {
 			return order;
 		} else {
@@ -110,7 +101,7 @@ public class OrderController implements CrudController<Order> {
 			
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(), order.getCustomerId()));
+				Order updatedOrder = orderDAO.update(new Order(order.getId(), (long) (order.getCustomerId()+item.getValue())));
 				orderItemDAO.create(new OrderItem(updatedOrder.getId(),itemId));
 				LOGGER.info("Item added");
 				return addItem(updatedOrder);
@@ -138,14 +129,13 @@ public class OrderController implements CrudController<Order> {
 			
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(),order.getCustomerId()));
-				LOGGER.info("HEY LOOK HERE!");
+				Order updatedOrder = orderDAO.update(new Order(order.getId(),(long) (order.getCustomerId()+item.getValue())));
 				LOGGER.info(updatedOrder);
 				List<OrderItem> orderItems = orderItemDAO.readAll();
 				Long orderItemId = (long) -1;
-				for (OrderItem oi :orderItems) {
-					if (oi.getOrderId()==order.getId() && oi.getItemId()==itemId) {
-						orderItemId = oi.getOrderItemId();
+				for (OrderItem n :orderItems) {
+					if (n.getOrderId()==order.getId() && n.getItemId()==itemId) {
+						orderItemId = n.getOrderItemId();
 					}
 				}
 				
@@ -154,12 +144,12 @@ public class OrderController implements CrudController<Order> {
 					LOGGER.info("Item removed from order");
 					return removeItem(updatedOrder);
 				} else {
-					LOGGER.info("Item not in order, please try again");
+					LOGGER.info("Item isn't within order, please try again");
 					return removeItem(order);
 				}
 	
 			} else {
-				LOGGER.info("No such item, please try again");
+				LOGGER.info("Item doesn't exist, please try again");
 				return removeItem(order);
 				
 			}
