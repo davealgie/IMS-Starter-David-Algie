@@ -64,10 +64,6 @@ public class ItemController implements CrudController<Item> {
 		LOGGER.info("Please enter the id of the item you would like to delete");
 		Long id = utils.getLong();
 		Item item = itemDAO.read(id);
-		if(item == null) {
-			LOGGER.info("Item with that id could not be found. Please insert another ID");
-			return 0;
-		}
 		int result = itemDAO.delete(id);
 		if(result > 0) {
 			LOGGER.info("Item Deleted");			
