@@ -1,7 +1,6 @@
-Coverage: 34%
-# Project Title
+# IMS Developed by David Algie
 
-One Paragraph of project description goes here
+This project was based on knowledge that has been gained during our weeks learning Java.
 
 ## Getting Started
 
@@ -9,11 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+MySQL and Eclipse were the only things really required in order to get the project started. There are dependancies that link outside sources to my Java syntax such as Maven and JUnit and these are contained within a file named "pom" within my eclipse Java syntax.
 
 ### Installing
 
