@@ -77,4 +77,6 @@ public class Item {
 				&& Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value);
 	}
 
+
+
 }

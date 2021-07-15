@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS ims.customers (
 
 CREATE TABLE IF NOT EXISTS ims.items (
   item_id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL,
-  price DECIMAL(10,2) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `value` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (item_id));
 
 
