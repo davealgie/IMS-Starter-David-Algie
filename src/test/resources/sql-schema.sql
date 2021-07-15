@@ -1,4 +1,4 @@
-drop schema if exists imstest;
+DROP SCHEMA IF EXISTS imstest;
 
 CREATE SCHEMA IF NOT EXISTS imstest;
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS imstest.orders (
   PRIMARY KEY (orders_id),
   CONSTRAINT customer_id
     FOREIGN KEY (customer_id)
-    REFERENCES ims.customers (id)
+    REFERENCES imstest.customers (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -42,11 +42,12 @@ CREATE TABLE IF NOT EXISTS imstest.orders_items (
   PRIMARY KEY (orders_items_id),
   CONSTRAINT orders_id
     FOREIGN KEY (orders_id)
-    REFERENCES ims.orders (orders_id)
+    REFERENCES imstest.orders (orders_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT item_id
     FOREIGN KEY (item_id)
-    REFERENCES ims.items (item_id)
+    REFERENCES imstest.items (item_id)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
     ON UPDATE NO ACTION);
