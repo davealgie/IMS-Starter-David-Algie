@@ -7,15 +7,12 @@ public class Order {
 	private Long id;
 	private Long customerId;
 	
-	public Order() {
-	}
-	
-	public Order(Long id, Long customerId) {
+
+	public Order(Long id, double d) {
 		this.id = id;
-		this.customerId = customerId;
+		this.customerId = (long) d;
 	
 	}
-	
 	public Order(Long customerId) {
 		this.customerId = customerId;
 	}
