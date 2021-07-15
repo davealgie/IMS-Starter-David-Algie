@@ -50,4 +50,3 @@ CREATE TABLE IF NOT EXISTS imstest.orders_items (
     REFERENCES imstest.items (item_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
-    ON UPDATE NO ACTION);
