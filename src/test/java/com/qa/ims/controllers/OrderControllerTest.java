@@ -41,11 +41,8 @@ public class OrderControllerTest {
 	@Mock
 	private OrderItemDAO orderItemDao;
 	
-	
-
 	@InjectMocks
 	private OrderController controller;
-	
 	
 	@Test
 	public void testReadAll() {

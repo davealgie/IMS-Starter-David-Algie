@@ -18,13 +18,13 @@ import com.qa.ims.utils.Utils;
 public class OrderController implements CrudController<Order> {
 
 	public static final Logger LOGGER = LogManager.getLogger();
-	
+
 	private OrderDAO orderDAO;
 	private ItemDAO itemDAO;
 	private CustomerDAO customerDAO;
 	private OrderItemDAO orderItemDAO;
 	private Utils utils;
-	
+
 	public OrderController(OrderDAO orderDAO, ItemDAO itemDAO, OrderItemDAO orderItemDAO, CustomerDAO customerDAO,
 			Utils utils) {
 		super();
@@ -34,11 +34,11 @@ public class OrderController implements CrudController<Order> {
 		this.customerDAO = customerDAO;
 		this.utils = utils;
 	}
-	
+
 	@Override
 	public List<Order> readAll() {
 		List<Order> orders = orderDAO.readAll();
-		if(orders.size() < 1) {
+		if (orders.size() < 1) {
 			LOGGER.info("There are no orders stored in the database.");
 			return orders;
 		}
@@ -47,7 +47,7 @@ public class OrderController implements CrudController<Order> {
 		}
 		return orders;
 	}
-	
+
 	@Override
 	public Order create() {
 		LOGGER.info("Please enter your customer id");
@@ -56,8 +56,7 @@ public class OrderController implements CrudController<Order> {
 		LOGGER.info("order created");
 		return order;
 	}
-	
-	
+
 	@Override
 	public Order update() {
 		LOGGER.info("Please enter the id of the order");
@@ -67,20 +66,20 @@ public class OrderController implements CrudController<Order> {
 		removeItem(order);
 		return order;
 	}
-	
+
 	@Override
 	public int delete() {
 		LOGGER.info("Please enter the id of the order you wish to delete");
 		Long id = utils.getLong();
 		List<OrderItem> orderItems = orderItemDAO.readAll();
 		for (OrderItem orderItem : orderItems) {
-			if (orderItem.getOrderId()== id) {
-					orderItemDAO.delete(orderItem.getOrderItemId());
+			if (orderItem.getOrderId() == id) {
+				orderItemDAO.delete(orderItem.getOrderItemId());
 			}
 		}
 		return orderDAO.delete(id);
 	}
-	
+
 	private Order addItem(Order order) {
 		List<Item> items = itemDAO.readAll();
 		LOGGER.info("Here are the items you can currently add:");
@@ -98,11 +97,12 @@ public class OrderController implements CrudController<Order> {
 					itemId = it.getId();
 				}
 			}
-			
+
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(), (long) (order.getCustomerId()+item.getValue())));
-				orderItemDAO.create(new OrderItem(updatedOrder.getId(),itemId));
+				Order updatedOrder = orderDAO
+						.update(new Order(order.getId(), (long) (order.getCustomerId() + item.getValue())));
+				orderItemDAO.create(new OrderItem(updatedOrder.getId(), itemId));
 				LOGGER.info("Item added");
 				return addItem(updatedOrder);
 			} else {
@@ -112,7 +112,7 @@ public class OrderController implements CrudController<Order> {
 			}
 		}
 	}
-	
+
 	private Order removeItem(Order order) {
 		List<Item> items = itemDAO.readAll();
 		LOGGER.info("Please enter an item to remove. Enter 'Complete' when you're finished");
@@ -126,19 +126,20 @@ public class OrderController implements CrudController<Order> {
 					itemId = it.getId();
 				}
 			}
-			
+
 			if (itemId != -1) {
 				Item item = itemDAO.read(itemId);
-				Order updatedOrder = orderDAO.update(new Order(order.getId(),(long) (order.getCustomerId()+item.getValue())));
+				Order updatedOrder = orderDAO
+						.update(new Order(order.getId(), (long) (order.getCustomerId() + item.getValue())));
 				LOGGER.info(updatedOrder);
 				List<OrderItem> orderItems = orderItemDAO.readAll();
 				Long orderItemId = (long) -1;
-				for (OrderItem n :orderItems) {
-					if (n.getOrderId()==order.getId() && n.getItemId()==itemId) {
+				for (OrderItem n : orderItems) {
+					if (n.getOrderId() == order.getId() && n.getItemId() == itemId) {
 						orderItemId = n.getOrderItemId();
 					}
 				}
-				
+
 				if (orderItemId != -1) {
 					orderItemDAO.delete(orderItemId);
 					LOGGER.info("Item removed from order");
@@ -147,15 +148,14 @@ public class OrderController implements CrudController<Order> {
 					LOGGER.info("Item isn't within order, please try again");
 					return removeItem(order);
 				}
-	
+
 			} else {
 				LOGGER.info("Item doesn't exist, please try again");
 				return removeItem(order);
-				
+
 			}
-			
+
 		}
 	}
-	
 
 }

@@ -20,7 +20,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	
 	@Override
 	public OrderItem modelFromResultSet(ResultSet resultSet) throws SQLException {
-		Long orderItemId = resultSet.getLong("order_item_id");
+		Long orderItemId = resultSet.getLong("orders_item_id");
 		Long orderId = resultSet.getLong("order_id");
 		Long itemId = resultSet.getLong("item_id");
 		return new OrderItem(orderItemId, orderId, itemId);
@@ -60,7 +60,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	public OrderItem create(OrderItem orderItem) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("INSERT INTO orders_items(orders_id, items_id) VALUES (?, ?)");) {
+						.prepareStatement("INSERT INTO orders_items(orders_id, item_id) VALUES (?, ?)");) {
 			statement.setLong(1, orderItem.getOrderId());
 			statement.setLong(2, orderItem.getItemId());
 			statement.executeUpdate();
@@ -92,7 +92,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	public OrderItem update(OrderItem orderItem) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("UPDATE orders_items SET orders_id = ?, items_id = ? WHERE orders_items_id = ?");) {
+						.prepareStatement("UPDATE orders_items SET orders_id = ?, item_id = ? WHERE orders_items_id = ?");) {
 			statement.setLong(1, orderItem.getOrderId());
 			statement.setLong(2, orderItem.getItemId());
 			statement.setLong(3, orderItem.getOrderItemId());
