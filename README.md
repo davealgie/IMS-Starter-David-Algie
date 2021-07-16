@@ -6,6 +6,10 @@ This project was based on knowledge that has been gained during our weeks learni
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+## Planning
+
+I used Jira for a planning board [Jira](https://davidteam3.atlassian.net/jira/software/projects/IS/boards/4) for use of a planning board.
+
 ### Prerequisites
 
 MySQL and Eclipse were the only things really required in order to get the project started. There are dependancies that link outside sources to my Java syntax such as Maven and JUnit and these are contained within a file named "pom" within my eclipse Java syntax.
