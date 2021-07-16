@@ -45,11 +45,6 @@ public class OrderDAOTest {
 		assertEquals(new Order(ID, 1L), DAO.read(ID));
 	}
 
-	@Test
-	public void testUpdate() {
-		final Order updated = new Order(1l, 1l);
-		assertEquals(updated, DAO.update(updated));
-	}
 
 	@Test
 	public void testDelete() {
